@@ -108,7 +108,8 @@ Predicted difficulty score (out of 10)
 All input fields must be filled for prediction to work.
 
 Project Structure
-`ACM_open_project/
+```
+ACM_open_project/
 ├── app/
 │   ├── app.py                # Streamlit web application
 ├── data/
@@ -127,7 +128,7 @@ Project Structure
 ├── requirements.txt
 ├── .gitattributes
 └── README.md
-`
+```
 
 Demo Video
 A short demo video (2–3 minutes) demonstrating the working of the web application is available here:
