@@ -1,121 +1,147 @@
-# AutoJudge - Problem Difficulty Predictor
+# AutoJudge – Problem Difficulty Predictor
 
-## Overview
-AutoJudge is an automated machine learning tool designed to predict the difficulty of competitive programming problems. Using problem text (description, input, and output sections), it estimates both a difficulty class and a numeric difficulty score. This helps contest setters and learners gauge how challenging a problem might be before attempting it or adding it to a contest. The system is built as an interactive web application with a Streamlit interface, making it easy to use from a browser.
+## Project Overview
+AutoJudge is a machine learning–based system that predicts the difficulty of competitive programming problems. Given a problem’s textual content (problem description, input format, and output format), the system predicts:
 
-## Features
-- Streamlit-based web application for interactive usage
-- Predicts a categorical difficulty class for competitive programming problems
-- Predicts a numeric difficulty score on a scale of 0 to 10
-- Uses pretrained machine learning models included in the repository
-- Based on TF-IDF text features and classical ML models
-- Current classification accuracy is approximately 50 percent
+- A **difficulty class** (classification)
+- A **numeric difficulty score** on a scale of 0 to 10 (regression)
 
-## Installation
-To set up AutoJudge locally, follow these steps:
+The project is developed as an **ACM Open Project** and aims to explore automated difficulty estimation using classical NLP and machine learning techniques. A Streamlit-based web interface is provided for interactive usage.
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/nitingargiitr/ACM_open_project.git
-   cd ACM_open_project
-Install the required dependencies:
+---
 
-bash
-Copy code
+## Dataset Used
+The dataset consists of competitive programming problems stored in a **JSON Lines** format.
+
+### Raw Dataset
+- File: `data/problems_data.jsonl`
+- Each problem includes:
+  - Title
+  - Problem description
+  - Input description
+  - Output description
+  - Difficulty class label
+  - Numeric difficulty score
+
+### Preprocessed Dataset
+- File: `data/processed_data.csv`
+- Created using `src/preprocess.py`
+- Text fields are cleaned, lowercased, and merged into a single text feature
+- Used directly for feature extraction and model training
+
+---
+
+## Approach and Models Used
+
+### Text Processing and Feature Extraction
+- Text from title, description, input, and output sections is merged
+- Preprocessing includes:
+  - Lowercasing
+  - Removal of special characters
+  - Whitespace normalization
+- Features are extracted using **TF-IDF Vectorization**
+  - Unigrams and bigrams
+  - Stop words removed
+- Vectorizer stored as: `models/tfidf.pkl`
+
+### Machine Learning Models
+Two separate models are trained:
+
+1. **Difficulty Classification**
+   - Model: Logistic Regression
+   - File: `models/classifier.pkl`
+   - Script: `src/train_classifier.py`
+
+2. **Difficulty Score Prediction**
+   - Model: Linear Regression
+   - File: `models/regressor.pkl`
+   - Script: `src/train_regressor.py`
+
+All trained models are included in the repository and loaded directly by the web application.
+
+---
+
+## Evaluation Metrics
+Model evaluation is performed using `src/evaluate.py`.
+
+### Classification Metrics
+- **Accuracy**
+- **Confusion Matrix**
+
+Current classification accuracy is approximately **50 percent**.
+
+### Regression Metrics
+- **Mean Absolute Error (MAE)**
+- **Root Mean Squared Error (RMSE)**
+
+These metrics provide insight into how close the predicted difficulty scores are to the ground truth values.
+
+---
+
+## Steps to Run the Project Locally
+1. Clone the Repository
+git clone https://github.com/nitingargiitr/ACM_open_project.git
+cd ACM_open_project
+2. Install Dependencies
 pip install -r requirements.txt
-Run the Streamlit application:
+3. Run the Web Application
+streamlit run app/app.py
+The application will open automatically in your default web browser.
 
-bash
-Copy code
-streamlit run app.py
-After running the command, the application will open automatically in your default web browser.
+Explanation of the Web Interface
+The web interface is built using Streamlit and provides a simple, interactive way to use the model.
 
-## Usage
-Enter the Problem Description, Input Description, and Output Description in the provided text fields.
+Input Fields
+Problem Description – Full problem statement
 
-Click on the Predict Difficulty button.
+Input Description – Input format and constraints
 
-The application will display:
+Output Description – Output format
 
-The predicted difficulty class
+Output
+After clicking Predict Difficulty, the app displays:
 
-The predicted difficulty score out of 10
+Predicted difficulty class
 
-All three input fields must be filled for the prediction to work correctly.
+Predicted difficulty score (out of 10)
 
-## Project Structure
+All input fields must be filled for prediction to work.
 
-ACM_open_project/
+Project Structure
+`ACM_open_project/
 ├── app/
 │   ├── app.py                # Streamlit web application
-│   └── requirements.txt      # App-specific dependencies
 ├── data/
-│   ├── problems_data.jsonl   # Raw competitive programming dataset
-│   └── processed_data.csv    # Preprocessed dataset used for training
+│   ├── problems_data.jsonl   # Raw dataset
+│   └── processed_data.csv    # Preprocessed dataset
 ├── models/
-│   ├── tfidf.pkl             # Trained TF-IDF vectorizer
-│   ├── classifier.pkl        # Logistic Regression classifier
-│   └── regressor.pkl         # Linear Regression regressor
+│   ├── tfidf.pkl             # TF-IDF vectorizer
+│   ├── classifier.pkl        # Logistic Regression model
+│   └── regressor.pkl         # Linear Regression model
 ├── src/
-│   ├── preprocess.py         # Data cleaning and preprocessing
-│   ├── feature_extration.py  # TF-IDF feature extraction
-│   ├── train_classifier.py   # Difficulty class model training
-│   ├── train_regressor.py    # Difficulty score model training
-│   └── evaluate.py           # Model evaluation script
+│   ├── preprocess.py         # Data preprocessing
+│   ├── feature_extration.py  # Feature extraction
+│   ├── train_classifier.py   # Classification training
+│   ├── train_regressor.py    # Regression training
+│   └── evaluate.py           # Model evaluation
+├── requirements.txt
 ├── .gitattributes
-├── requirements.txt          # Global project dependencies
 └── README.md
+`
 
-## Models
-Feature Extraction: TF-IDF Vectorizer with unigrams and bigrams
+Demo Video
+A short demo video (2–3 minutes) demonstrating the working of the web application is available here:
 
-Classification Model: Logistic Regression
+Demo Video Link:
 
-Regression Model: Linear Regression
 
-All trained models are already included in the models directory and are loaded directly by the application.
+Author Details
+Name: Nitin Garg
 
-## Dataset
-The dataset consists of competitive programming problems stored in a JSON Lines file (problems_data.jsonl).
-
-Each problem includes:
-
-Title
-
-Problem description
-
-Input description
-
-Output description
-
-Difficulty class label
-
-Numeric difficulty score
-
-The preprocess.py script cleans and merges text fields and converts the data into a CSV file used for training and evaluation.
-
-## Evaluation
-The evaluate.py script reports:
-
-Classification accuracy and confusion matrix
-
-Regression metrics including MAE and RMSE
-
-The current difficulty classification accuracy is approximately 50 percent, leaving room for improvement through better models, more data, or advanced NLP techniques.
-
-## Credits
-Author: Nitin Garg
+Email: nitin_g@ece.iitr.ac.in
 
 GitHub: https://github.com/nitingargiitr
 
 Project Type: ACM Open Project
 
 AutoJudge is developed as an open project to explore automated difficulty estimation for competitive programming problems using machine learning.
-
-
-
-
-
-
-
-
