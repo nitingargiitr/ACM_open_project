@@ -133,7 +133,7 @@ ACM_open_project/
 Demo Video
 A short demo video (2–3 minutes) demonstrating the working of the web application is available here:
 
-Demo Video Link:
+Demo Video Link: https://drive.google.com/file/d/16ICqlZrjHH-7BmGlLuioCi6rCYJFxysf/view?usp=drive_link
 
 
 Author Details
